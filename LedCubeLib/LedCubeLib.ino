@@ -23,12 +23,11 @@ void loop()
 {
   digitalWrite(13, LOW);
   test();
-  digitalWrite(13, HIGH);
+  digitalWrite(13, HIGH); 
 }
 
 void test()
 {
-  /*bitHigh();
   bitHigh();
   bitHigh();
   bitHigh();
@@ -45,30 +44,6 @@ void test()
   bitHigh();
   bitHigh();
   bitHigh();
-  bitHigh();
-  bitHigh();
-  bitHigh();
-  bitHigh();
-  bitHigh();
-  bitHigh();
-  bitHigh();*/
-
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
   bitLow();
   bitLow();
   bitLow();
@@ -78,7 +53,32 @@ void test()
   bitLow();
   bitLow();
 
-  PORTD = datamask;
+  /*bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();
+  bitLow();*/
+
+  PORTD = datamask; //LOW
   delay(50);
 }
 
@@ -90,27 +90,35 @@ void test()
   }
 }*/
 
-void bitHigh()
+void bitLow()
 {
-  for(int i=0; i<22; i++)
+  for(int i=0; i<6; i++)
   {
     PORTD = ~datamask; //HIGH
   }
-  for(int i=0; i<5; i++)
+  for(int i=0; i<14; i++)
   {
     PORTD = datamask; //LOW
   }
 }
 
-void bitLow()
+void bitHigh()
 {
-  for(int i=0; i<5; i++)
+  for(int i=0; i<13; i++)
+  {
+    PORTD = ~datamask; //HIGH
+  }
+  for(int i=0; i<7; i++)
   {
     PORTD = datamask; //LOW
   }
-  for(int i=0; i<22; i++)
+}
+
+void bitReset()
+{
+  for(int i=0; i<800; i++)
   {
-    PORTD = ~datamask; //HIGH
+    PORTD = datamask; //LOW
   }
 }
 
