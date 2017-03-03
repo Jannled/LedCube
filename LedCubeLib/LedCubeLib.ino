@@ -17,6 +17,13 @@ void setup()
   pinMode(debug_led, OUTPUT);
   digitalWrite(13, LOW);
   datamask = B00010000;          //TODO Mask adapts to Data Pin
+
+  long stamp1 = micros();
+  PORTD = datamask; //LOW
+  long stamp2 = micros();
+  Serial.begin(9600);
+  Serial.println(stamp2-stamp1);
+  Serial.println("Dies ist ein langer String zum testen!");
 }
 
 void loop()
@@ -36,22 +43,6 @@ void test()
   bitHigh();
   bitHigh();
   bitHigh();
-  bitHigh();
-  bitHigh();
-  bitHigh();
-  bitHigh();
-  bitHigh();
-  bitHigh();
-  bitHigh();
-  bitHigh();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
-  bitLow();
 
   /*bitLow();
   bitLow();
@@ -78,8 +69,7 @@ void test()
   bitLow();
   bitLow();*/
 
-  PORTD = datamask; //LOW
-  delay(50);
+  bitReset();
 }
 
 /*void draw()
