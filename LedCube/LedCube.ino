@@ -6,7 +6,7 @@ int datapin = 3;
 //DEBUG LED
 int debug_led = 13;
 
-byte leds[numLeds][3];
+byte leds[numLeds*3];
 int R = 0;
 int G = 1;
 int B = 2;
@@ -31,14 +31,16 @@ void loop()
 }
 
 /**
- * Method to run throug the time measurement
+ * Method to run through the time measurement
  */
 void test()
 {
-  //6 Logick Ticks (576-640)
-  for(int i=0; i<numLeds; i++)
+  //1088 - 1152 bzw 1728 - 1792 bzw 2560 - 2624
+  for(int i=0; i<numLeds*3; i++)
   {
-    PORTD = B00000000;
+    PORTD = dmHigh;
+    
+    
   }
 }
 
@@ -49,18 +51,13 @@ void serialStream()
 {
   noInterrupts(); //Disable interrupts to make sure nothing disturbs while sending
 
-  
-  
-  interrupts(); //Turn them back on again
-}
-
-/*void draw()
-{
-  for(int i=0; i<sizeof(leds); i++)
+  for(int i=0; i<numLeds; i++)
   {
     
   }
-}*/
+  
+  interrupts(); //Turn them back on again
+}
 
 void toBits(byte color, boolean bits[])
 {
