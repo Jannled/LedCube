@@ -1,15 +1,13 @@
 #define dmHigh B00000000
 #define dmLow B11111111
 #define numLeds 125
+#define nop __asm__("nop\n\t");
 int datapin = 3;
 
 //DEBUG LED
 int debug_led = 13;
 
 byte leds[numLeds*3];
-int R = 0;
-int G = 1;
-int B = 2;
 
 void setup()
 {
@@ -35,13 +33,22 @@ void loop()
  */
 void test()
 {
-  //1088 - 1152 bzw 1728 - 1792 bzw 2560 - 2624
-  for(int i=0; i<numLeds*3; i++)
+  int buff = leds[0];
+  PORTD = dmLow;
+  if(buff & 1)
   {
+    PORTD = dmLow;
+    nop nop nop //Pull High after 7 Ticks
     PORTD = dmHigh;
-    
-    
   }
+  else
+  {
+    PORTD = dmLow;
+    nop nop nop nop nop nop nop nop nop nop nop //Pull High after 14 Ticks
+    PORTD = dmHigh;
+  }
+  
+  buff = buff << 1;
 }
 
 /**
@@ -50,10 +57,25 @@ void test()
 void serialStream()
 {
   noInterrupts(); //Disable interrupts to make sure nothing disturbs while sending
-
+  int buff = leds[0];
+  
   for(int i=0; i<numLeds; i++)
   {
+    PORTD = dmLow;
+    if(buff & 1)
+    {
+      PORTD = dmLow;
+      nop nop nop //Pull High after 7 Ticks
+      PORTD = dmHigh;
+    }
+    else
+    {
+      PORTD = dmLow;
+      nop nop nop nop nop nop nop nop nop nop nop //Pull High after 14 Ticks
+      PORTD = dmHigh;
+    }
     
+    buff = buff << 1;
   }
   
   interrupts(); //Turn them back on again
