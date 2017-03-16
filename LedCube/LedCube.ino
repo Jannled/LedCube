@@ -4,6 +4,8 @@
 #define nop __asm__("nop\n\t");
 int datapin = 3;
 
+byte testValue = 124;
+
 //DEBUG LED
 int debug_led = 13;
 
@@ -15,10 +17,29 @@ void setup()
   pinMode(debug_led, OUTPUT);
   digitalWrite(13, LOW);
   Serial.begin(9600);
+  for(int i=0; i<numLeds*3; i++)
+  {
+    leds[i] = B11111111;
+    leds[i] = B00000000;
+  }
 }
 
 void loop()
 {
+  byte testV = leds[0];
+  String testa = "";
+  for(int i=0; i<8; i++)
+  {
+    if(testV & 1)
+    {
+      testa += "1";
+    }
+    else{
+      testa += "0";
+    }
+    testV >>= 1;
+  }
+  Serial.println(testa);
   noInterrupts();
   long t1 = micros();
   test();
@@ -33,23 +54,36 @@ void loop()
  */
 void test()
 {
-  int buff = leds[0];
-  PORTD = dmLow;
-  if(buff & 1)
-  {
-    PORTD = dmLow;
-    nop nop nop //Pull High after 7 Ticks
+  byte buff = leds[0];
+  for(int i=0; i<24; i++)
+  {/*
     PORTD = dmHigh;
+    if(buff & 1)
+    {
+      nop nop nop nop nop nop nop nop nop nop nop //Pull Low after 14 Ticks
+      PORTD = dmLow;
+    }
+    else
+    {
+      nop nop nop //Pull Low after 7 Ticks
+      PORTD = dmLow;
+    }
+    */
+    //BIT0: 340 Ticks optimal
+    //BIT1: 172,8 Ticks optimal
+    if(buff & 1)
+    {
+      nop nop //Finish after 7 -1 Ticks
+    }
+    else
+    {
+      nop nop nop nop nop nop nop nop nop //Finish after 14 -1 Ticks
+    }
+    buff >>= 1; //Shift one right
   }
-  else
-  {
-    PORTD = dmLow;
-    nop nop nop nop nop nop nop nop nop nop nop //Pull High after 14 Ticks
-    PORTD = dmHigh;
-  }
-  
-  buff = buff << 1;
 }
+
+
 
 /**
  * Send the bytes to the LEDs
