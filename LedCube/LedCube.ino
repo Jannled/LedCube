@@ -17,15 +17,14 @@ void setup()
   pinMode(debug_led, OUTPUT);
   digitalWrite(13, LOW);
   Serial.begin(9600);
-  for(int i=0; i<numLeds*3; i++)
-  {
-    leds[i] = B11111111;
-    leds[i] = B00000000;
-  }
 }
 
 void loop()
 {
+  for(int i=0; i<numLeds*3; i++)
+  {
+    leds[i] = B11111111;
+  }
   byte testV = leds[0];
   String testa = "";
   for(int i=0; i<8; i++)
@@ -55,8 +54,8 @@ void loop()
 void test()
 {
   byte buff = leds[0];
-  for(int i=0; i<24; i++)
-  {/*
+  for(int i=0; i<8; i++)
+  {
     PORTD = dmHigh;
     if(buff & 1)
     {
@@ -68,16 +67,16 @@ void test()
       nop nop nop //Pull Low after 7 Ticks
       PORTD = dmLow;
     }
-    */
+    
     //BIT0: 340 Ticks optimal
     //BIT1: 172,8 Ticks optimal
     if(buff & 1)
     {
-      nop nop //Finish after 7 -1 Ticks
+      nop nop nop nop //Finish after 7 -1 Ticks
     }
     else
     {
-      nop nop nop nop nop nop nop nop nop //Finish after 14 -1 Ticks
+      nop nop nop nop nop nop nop nop nop nop nop //Finish after 14 -1 Ticks
     }
     buff >>= 1; //Shift one right
   }
